@@ -159,6 +159,7 @@ def test_string_overuse_settings(
 def test_string_overuse(
     assert_errors,
     assert_error_text,
+    assert_violation_location,
     parse_ast_tree,
     default_options,
     strings,
@@ -177,6 +178,7 @@ def test_string_overuse(
         string_value.replace('"', '') or "''",
         default_options.max_string_usages,
     )
+    assert_violation_location(visitor)
 
 
 @pytest.mark.parametrize(

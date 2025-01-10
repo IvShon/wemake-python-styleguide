@@ -86,7 +86,7 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
         if node.value in self._ignored_string_constants:
             return
 
-        if not self._string_constants[node.value]:
+        if node.value not in self._string_constants_first_node:
             self._string_constants_first_node[node.value] = node
 
         self._string_constants[node.value] += 1

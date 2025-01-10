@@ -100,3 +100,26 @@ def assert_error_text():
         assert reproduction.message() == violation.message()
 
     return factory
+
+
+@pytest.fixture(scope='session')
+def assert_violation_location():
+    """Helper function to assert visitor violation's locations is not (0, 0)."""
+
+    def factory(
+        visitor: BaseVisitor,
+        ignored_types: _IgnoredTypes = None,
+    ) -> None:
+        if ignored_types:
+            real_errors = [
+                error
+                for error in visitor.violations
+                if not isinstance(error, ignored_types)
+            ]
+        else:
+            real_errors = visitor.violations
+
+        for violation in real_errors:
+            assert violation._location() != (0, 0)
+
+    return factory
