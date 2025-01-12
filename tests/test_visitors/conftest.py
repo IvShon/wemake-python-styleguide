@@ -103,23 +103,15 @@ def assert_error_text():
 
 
 @pytest.fixture(scope='session')
-def assert_violation_location():
-    """Helper function to assert visitor violation's locations is not (0, 0)."""
+def assert_error_location():
+    """Helper function to assert visitor violation location is expected."""
 
     def factory(
         visitor: BaseVisitor,
-        ignored_types: _IgnoredTypes = None,
+        expected: tuple[int, int],
     ) -> None:
-        if ignored_types:
-            real_errors = [
-                error
-                for error in visitor.violations
-                if not isinstance(error, ignored_types)
-            ]
-        else:
-            real_errors = visitor.violations
-
-        for violation in real_errors:
-            assert violation._location() != (0, 0)
+        assert len(visitor.violations) == 1
+        violation = visitor.violations[0]
+        assert violation._location() == expected  # noqa: SLF001
 
     return factory
